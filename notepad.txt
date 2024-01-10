@@ -1,0 +1,30 @@
+phys system:
+
+dont check collisions between static colliders
+
+check collisions between dynamic bodies
+
+contact points requrie: 
+- collision normal
+- mass of each object
+- velocity at collision
+	this requires calculating velocity at a point on a body from both linear and angular velocity 
+		should be a simple distance function? something like linear velocity + dist * angular velocity
+			what is the velocity of a point on a sphere with x linear velocity and r radius?
+
+look into VISITOR PATTERN
+
+idea:
+	create contacts that store these all and reference the phys bodies
+	for each collision generate a contact, store them all in a vector, and then resolve each and delete
+
+might also need to look into depenetration?
+
+function pointer on colliders for oncollision that reference other collider
+
+some objects are physical but others arent. should all objects have a body and the body class have a static flag?
+
+TODO:
+
+box on box collision
+broadphase
