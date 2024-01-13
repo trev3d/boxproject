@@ -24,6 +24,7 @@
     <ProjectGuid>{c09bdfec-ca69-4775-8663-e304d2375caa}</ProjectGuid>
     <RootNamespace>glmarbles</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>boxproject</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -136,7 +137,9 @@
     <ClInclude Include="constants.h" />
     <ClInclude Include="dynamics.h" />
     <ClInclude Include="gamepieces.h" />
+    <ClInclude Include="levelObject.h" />
     <ClInclude Include="mesh.h" />
+    <ClInclude Include="shapeMesher.h" />
     <ClInclude Include="rendering.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="transform.h" />
@@ -151,8 +154,10 @@
     <ClCompile Include="dynamics.cpp" />
     <ClCompile Include="gamepieces.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="levelObject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="shapeMesher.cpp" />
     <ClCompile Include="rendering.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="transform.cpp" />

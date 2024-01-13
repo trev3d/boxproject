@@ -39,6 +39,12 @@
     <ClInclude Include="gamepieces.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="levelObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="shapeMesher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="frag.fs">
@@ -77,6 +83,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gamepieces.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="levelObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="shapeMesher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
