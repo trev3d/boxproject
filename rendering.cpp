@@ -5,7 +5,7 @@
 //#include "stb_image.h"
 //#endif
 
-jtgMeshRenderer::jtgMeshRenderer(jtgTransform* trans, jtgMesh& mesh)
+jtgMeshRenderer::jtgMeshRenderer(jtgTransform* trans)
 {
 	this->trans = trans;
 
@@ -38,8 +38,6 @@ jtgMeshRenderer::jtgMeshRenderer(jtgTransform* trans, jtgMesh& mesh)
 	glEnableVertexAttribArray(2);
 
 	glBindVertexArray(0);
-
-	setMesh(mesh);
 }
 
 void jtgMeshRenderer::setMesh(const jtgMesh& mesh)
@@ -61,6 +59,9 @@ void jtgMeshRenderer::setMesh(const jtgMesh& mesh)
 
 void jtgMeshRenderer::render()
 {
+	if (this->trisSize == 0)
+		return;
+
 	//jtgShaderUse(this->shader->id);
 	jtgTransformShaderCurrent->applyTransform(this->trans->mat);
 	//this->shader->applyTransform(this->trans->mat);

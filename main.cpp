@@ -15,7 +15,7 @@
 #include "rendering.h"
 #include "mesh.h"
 
-#include "gamepieces.h"
+#include "levelObject.h"
 
 void OnFramebufferSize(GLFWwindow* window, int width, int height)
 {
@@ -68,19 +68,20 @@ int main()
 
 	jtgShaderGroup shaderGroup = jtgShaderGroup(&mainShader);
 
-	jtgMarble marble = jtgMarble(shaderGroup, physWorld);
-	marble.trans.pos = glm::vec3(0, 3, 0);
-	marble.trans.apply();
+	PathsD shapes = PathsD();
+	PathD shape = PathD();
+	shape.push_back(PointD(0, 0));
+	shape.push_back(PointD(1, 0));
+	shape.push_back(PointD(1, 1));
+	shape.push_back(PointD(0, 1));
+	shapes.push_back(shape);
 
-	std::vector<jtgBlock> blocks;
+	bpLevelObject levelObject = bpLevelObject(shapes, glm::vec2(0, 0), 0, 1);
 
-	jtgBlock block = jtgBlock(glm::vec3(5, 1, 5), shaderGroup, physWorld);
-	block.trans.pos = glm::vec3(0, -3, 0);
-	block.trans.rot = glm::quat(glm::vec3(0, 0, 0.01));
-	block.trans.apply();
-	blocks.push_back(block);
+	shaderGroup.add(levelObject.rend);
 
-	const glm::vec3 camOffset = glm::vec3(0, 1, -3);
+
+	const glm::vec3 camOffset = glm::vec3(10, 10, 10);
 
 
 	// end init
@@ -96,26 +97,13 @@ int main()
 
 		glfwPollEvents();
 
-		// update phys
-
-		physWorld.step(dt);
-
-		// reset marble if fallen
-
-		if (marble.trans.pos.y < -10) {
-			marble.trans.pos = glm::vec3(0);
-			marble.trans.apply();
-
-			marble.body.vel = glm::vec3(0);
-		}
-
 		// update cam
 
-		glm::vec3 camTargetPos = marble.trans.pos + camOffset;
+		glm::vec3 camTargetPos = levelObject.trans.pos + camOffset;
 		glm::vec3 camDiff = camTargetPos - jtgCamPos;
-		glm::vec3 camTargetForw = jtgCamPos - marble.trans.pos;
+		glm::vec3 camTargetForw = jtgCamPos - levelObject.trans.pos;
 
-		jtgCamOrient(jtgCamPos + camDiff * dt * 10.0f, marble.trans.pos); 
+		jtgCamOrient(jtgCamPos + camDiff * dt * 10.0f, levelObject.trans.pos);
 
 		// render
 

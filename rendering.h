@@ -18,7 +18,7 @@ typedef struct jtgMeshRenderer {
 	jtgTransform* trans = nullptr;
 
 	jtgMeshRenderer() = default;
-	jtgMeshRenderer(jtgTransform* trans, jtgMesh& mesh);
+	jtgMeshRenderer(jtgTransform* trans);
 
 	void setMesh(const jtgMesh& mesh);
 	void render();

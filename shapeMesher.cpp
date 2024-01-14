@@ -1,20 +1,17 @@
 #include "shapeMesher.h"
-#include "mesh.h"
-
-#include <mapbox/earcut.hpp>
 
 namespace mapbox {
 	namespace util {
 		template <>
-		struct nth<0, IntPoint> {
-			inline static auto get(const IntPoint& t) {
-				return t.X / res;
+		struct nth<0, PointD> {
+			inline static auto get(const PointD& t) {
+				return t.x;
 			};
 		};
 		template <>
-		struct nth<1, IntPoint> {
-			inline static auto get(const IntPoint& t) {
-				return t.Y / res;
+		struct nth<1, PointD> {
+			inline static auto get(const PointD& t) {
+				return t.y;
 			};
 		};
 
@@ -141,7 +138,7 @@ void pathsToMesh(const PathsD &paths,jtgMesh& mesh,const float zThick) {
 			int j = (i + 1) % path.size();
 
 			//normal A
-			glm::vec2 na = pointToVec(PointD(path[i].Y - path[j].Y, path[j].X - path[i].X));
+			glm::vec2 na = pointToVec(PointD(path[i].y - path[j].y, path[j].x - path[i].x));
 			na = glm::normalize(na);
 
 			//previous index
@@ -154,7 +151,7 @@ void pathsToMesh(const PathsD &paths,jtgMesh& mesh,const float zThick) {
 			nb = glm::normalize(nb);
 
 			//bevel direction and magnitude
-			glm::vec3 b; b.xy = glm::normalize(na + nb);
+			glm::vec3 b = glm::vec3(glm::normalize(na + nb), 0);
 			b *= 1.41421f / sqrt(1 + glm::dot(na, nb));
 
 			v += b * bp[0].x;
@@ -176,25 +173,34 @@ void pathsToMesh(const PathsD &paths,jtgMesh& mesh,const float zThick) {
 					else
 						z2 = glm::vec3(0, 0, bp[n + 1].y);
 
-					glm::vec3 nbv3; nbv3.xy = nb;
+					glm::vec3 nbv3 = glm::vec3(nb, 0);
 					glm::vec3 nn = v + nbv3 * (z.z - z2.z);
 					//
 					// int a = 1;
 					//
 					// if (s[n + 1])
-					mesh.verts.push_back(v + b * (bp[n].x - o) + z);
+					glm::vec3 vert = v + b * (bp[n].x - o) + z;
+					mesh.verts.push_back(vert.x);
+					mesh.verts.push_back(vert.y);
+					mesh.verts.push_back(vert.z);
 
-					uvs.push_back(verts.at(verts.size() - 1));
+					//uvs.push_back(verts.at(verts.size() - 1));
 
 					if (n == bpSize - 2)
 					{
-						verts.push_back(v + b * (bp[n + 1].x - o) + z2);
-						uvs.push_back(nn);
+						glm::vec3 vert = v + b * (bp[n + 1].x - o) + z2;
+						mesh.verts.push_back(vert.x);
+						mesh.verts.push_back(vert.y);
+						mesh.verts.push_back(vert.z);
+						//uvs.push_back(nn);
 					}
 					else if (s[n + 1])
 					{
-						verts.push_back(v + b * (bp[n + 1].x - o) + z2);
-						uvs.push_back(verts.at(verts.size() - 1));
+						glm::vec3 vert = v + b * (bp[n + 1].x - o) + z2;
+						mesh.verts.push_back(vert.x);
+						mesh.verts.push_back(vert.y);
+						mesh.verts.push_back(vert.z);
+						//uvs.push_back(verts.at(verts.size() - 1));
 					}
 				}
 
@@ -212,7 +218,7 @@ void pathsToMesh(const PathsD &paths,jtgMesh& mesh,const float zThick) {
 
 				glm::vec3 nn;
 				if (sh)
-					nn = v + vec2toVec3(na, 0) * (z.z - z2.z);
+					nn = v + (na, 0) * (z.z - z2.z);
 				else
 				{
 					nn = v + glm::normalize(b) * (z.z - z2.z);
@@ -221,61 +227,80 @@ void pathsToMesh(const PathsD &paths,jtgMesh& mesh,const float zThick) {
 				if (s[n])
 					a++;
 
+				int vsize = mesh.verts.size();
+
 				if (i == path.size() - 1)
 				{
-					tris.push_back(k + n + a);
-					tris.push_back(verts.size() + 1);
-					tris.push_back(verts.size());
+					mesh.tris.push_back(k + n + a);
+					mesh.tris.push_back(vsize + 1);
+					mesh.tris.push_back(vsize);
 
-					tris.push_back(verts.size() + 1);
-					tris.push_back(k + n + a);
-					tris.push_back(k + n + a + 1);
+					mesh.tris.push_back(vsize + 1);
+					mesh.tris.push_back(k + n + a);
+					mesh.tris.push_back(k + n + a + 1);
 				}
 				else
 				{
-					tris.push_back(verts.size() + c);
-					tris.push_back(verts.size() + 1);
-					tris.push_back(verts.size());
+					mesh.tris.push_back(vsize + c);
+					mesh.tris.push_back(vsize + 1);
+					mesh.tris.push_back(vsize);
 
-					tris.push_back(verts.size() + 1);
-					tris.push_back(verts.size() + c);
-					tris.push_back(verts.size() + c + 1);
+					mesh.tris.push_back(vsize + 1);
+					mesh.tris.push_back(vsize + c);
+					mesh.tris.push_back(vsize + c + 1);
 				}
 
 				//add vertices
-				verts.push_back(v + b * (bp[n].x - o) + z);
-				uvs.push_back(verts.at(verts.size() - 1));
+				glm::vec3 vert = v + b * (bp[n].x - o) + z;
+				mesh.verts.push_back(vert.x);
+				mesh.verts.push_back(vert.y);
+				mesh.verts.push_back(vert.z);
+
+				// ad uvs
+				/*uvs.push_back(verts.at(verts.size() - 1));*/
+				mesh.verts.push_back(mesh.verts.at(mesh.verts.size() - 3));
+				mesh.verts.push_back(mesh.verts.at(mesh.verts.size() - 2));
+				mesh.verts.push_back(mesh.verts.at(mesh.verts.size() - 1));
 
 				if (n == bpSize - 2)
 				{
-					verts.push_back(v + b * (bp[n + 1].x - o) + z2);
-					uvs.push_back(nn);
+					glm::vec3 vert = v + b * (bp[n + 1].x - o) + z2;
+					mesh.verts.push_back(vert.x);
+					mesh.verts.push_back(vert.y);
+					mesh.verts.push_back(vert.z);
+					//uvs.push_back(nn);
 				}
 				else if (s[n + 1])
 				{
-					verts.push_back(v + b * (bp[n + 1].x - o) + z2);
-					uvs.push_back(verts.at(verts.size() - 1));
+					glm::vec3 vert = v + b * (bp[n + 1].x - o) + z2;
+					mesh.verts.push_back(vert.x);
+					mesh.verts.push_back(vert.y);
+					mesh.verts.push_back(vert.z);
+					//uvs.push_back(verts.at(verts.size() - 1));
 				}
 			}
 		}
 
 		offsetPaths[l] = offsetPath;
 
-		k = verts.size();
+		k = mesh.verts.size();
 	}
 
-	norms = computeNormals(verts, tris);
+	//norms = computeNormals(verts, tris);
 
 	// front face
 
 	for (unsigned int i = 0; i < offsetPaths[0].size(); i++) {
-		verts.push_back(vec2toVec3(offsetPaths[0][i], 0));
-		uvs.push_back(offsetPaths[0][i]);
-		norms.push_back(glm::vec3(0, 0, -1));
+		glm::vec3 vert = glm::vec3(offsetPaths[0][i], 0);
+		mesh.verts.push_back(vert.x);
+		mesh.verts.push_back(vert.y);
+		mesh.verts.push_back(vert.z);
+		//uvs.push_back(offsetPaths[0][i]);
+		//norms.push_back(glm::vec3(0, 0, -1));
 	}
 
 	std::vector<unsigned int> frontTris = mapbox::earcut<unsigned int>(paths);
 	for (int i = frontTris.size() - 1; i > -1; i--) {
-		tris.push_back(frontTris[i] + k);
+		mesh.tris.push_back(frontTris[i] + k);
 	}
 }
