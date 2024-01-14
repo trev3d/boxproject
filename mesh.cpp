@@ -178,3 +178,30 @@ void jtgMeshPolyhedron(jtgMesh& mesh, float r)
 		11, 7, 5,
 	};
 }
+
+void jtgMesh::addVert(glm::vec3 vert, glm::vec3 norm, glm::vec2 uv)
+{
+	this->verts.push_back(vert.x);
+	this->verts.push_back(vert.y);
+	this->verts.push_back(vert.z);
+
+	this->verts.push_back(norm.x);
+	this->verts.push_back(norm.y);
+	this->verts.push_back(norm.z);
+
+	this->verts.push_back(uv.x);
+	this->verts.push_back(uv.y);
+}
+
+void jtgMesh::addTri(int a, int b, int c)
+{
+	this->tris.push_back(a);
+	this->tris.push_back(b);
+	this->tris.push_back(c);
+}
+
+void jtgMesh::addQuad(int a, int b, int c, int d)
+{
+	addTri(a, b, c);
+	addTri(b, a, d);
+}

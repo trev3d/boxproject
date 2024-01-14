@@ -33,7 +33,7 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); mac only
 
-	GLFWwindow* mainWindow = glfwCreateWindow(winSize.x, winSize.y, "Learn openGL", NULL, NULL);
+	GLFWwindow* mainWindow = glfwCreateWindow(winSize.x, winSize.y, "restitched", NULL, NULL);
 	if (mainWindow == NULL)
 	{
 		std::cout << "Failed to create window" << std::endl;
@@ -59,7 +59,7 @@ int main()
 	// init game
 
 	jtgCamSetup();
-	jtgCamOrient(glm::vec3(0, 1, 4), glm::vec3(0, 0, -1));
+	jtgCamOrient(glm::vec3(0), glm::vec3(0, 0, 1));
 
 	jtgTransformShader mainShader = jtgTransformShader(jtgShaderBuild("vert.vs", "frag.fs"));
 
@@ -70,7 +70,7 @@ int main()
 
 	PathsD shapes = PathsD();
 	PathD shape = PathD();
-	shape.push_back(PointD(0, 0));
+	shape.push_back(PointD(-1, 0));
 	shape.push_back(PointD(1, 0));
 	shape.push_back(PointD(1, 1));
 	shape.push_back(PointD(0, 1));
@@ -80,9 +80,9 @@ int main()
 
 	shaderGroup.add(levelObject.rend);
 
+	const glm::vec3 camOffset = glm::vec3(0, 0, -1);
 
-	const glm::vec3 camOffset = glm::vec3(10, 10, 10);
-
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	// end init
 
@@ -98,6 +98,8 @@ int main()
 		glfwPollEvents();
 
 		// update cam
+
+		const glm::vec3 camOffset = glm::vec3(sin(t), cos(t), -1);
 
 		glm::vec3 camTargetPos = levelObject.trans.pos + camOffset;
 		glm::vec3 camDiff = camTargetPos - jtgCamPos;

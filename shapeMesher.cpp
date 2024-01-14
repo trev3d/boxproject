@@ -67,29 +67,38 @@ std::vector<glm::vec3> computeNormals(const std::vector<glm::vec3>& verts,
 	return norms;
 }
 
-void pathsToMesh(const PathsD &paths,jtgMesh& mesh,const float zThick) {
+void pathsToMesh(const PathsD& paths, jtgMesh& mesh, const float zThick) {
 
 	mesh.verts.clear();
 	mesh.tris.clear();
 
-	//verts.clear();
-	//tris.clear();
-	//uvs.clear();
-	//norms.clear();
-
 	// placeholder bevel 
+	//glm::vec2 bp[] = {
+	//	glm::vec2(0.2f, 0),
+	//	glm::vec2(0.1f, 0),
+	//	glm::vec2(0.02928932188f, 0.02928932188f),
+	//	glm::vec2(0, 0.1f),
+	//	glm::vec2(0, 1),
+	//};
+	//int bpSize = 5;
+
+	//bool s[] = {
+	//	false,
+	//	false,
+	//	false,
+	//	false,
+	//	false,
+	//};
+
 	glm::vec2 bp[] = {
-		glm::vec2(0.2f, 0),
 		glm::vec2(0.1f, 0),
-		glm::vec2(0.02928932188f, 0.02928932188f),
 		glm::vec2(0, 0.1f),
 		glm::vec2(0, 1),
 	};
-	int bpSize = 5;
+
+	int bpSize = 3;
 
 	bool s[] = {
-		false,
-		false,
 		false,
 		false,
 		false,
@@ -131,14 +140,13 @@ void pathsToMesh(const PathsD &paths,jtgMesh& mesh,const float zThick) {
 		for (int i = 0; i < path.size(); i++)
 		{
 			//front face vertex position
-			glm::vec3 v;
-			v.xy = pointToVec(path[i]);
+			glm::vec3 v = glm::vec3(path[i].x, path[i].y, 0);
 
 			//next index
 			int j = (i + 1) % path.size();
 
 			//normal A
-			glm::vec2 na = pointToVec(PointD(path[i].y - path[j].y, path[j].x - path[i].x));
+			glm::vec2 na = glm::vec2(path[i].y - path[j].y, path[j].x - path[i].x);
 			na = glm::normalize(na);
 
 			//previous index
@@ -147,7 +155,7 @@ void pathsToMesh(const PathsD &paths,jtgMesh& mesh,const float zThick) {
 				j += path.size();
 
 			//normal B
-			glm::vec2 nb = pointToVec(PointD(path[j].y - path[i].y, path[i].y - path[j].y));
+			glm::vec2 nb = glm::vec2(path[j].y - path[i].y, path[i].x - path[j].x);
 			nb = glm::normalize(nb);
 
 			//bevel direction and magnitude
@@ -180,28 +188,22 @@ void pathsToMesh(const PathsD &paths,jtgMesh& mesh,const float zThick) {
 					//
 					// if (s[n + 1])
 					glm::vec3 vert = v + b * (bp[n].x - o) + z;
-					mesh.verts.push_back(vert.x);
-					mesh.verts.push_back(vert.y);
-					mesh.verts.push_back(vert.z);
+					mesh.addVert(vert, glm::vec3(0, 1, 0), vert.xy);
 
 					//uvs.push_back(verts.at(verts.size() - 1));
 
 					if (n == bpSize - 2)
 					{
-						glm::vec3 vert = v + b * (bp[n + 1].x - o) + z2;
-						mesh.verts.push_back(vert.x);
-						mesh.verts.push_back(vert.y);
-						mesh.verts.push_back(vert.z);
-						//uvs.push_back(nn);
+						vert = v + b * (bp[n + 1].x - o) + z2;
+						mesh.addVert(vert, glm::vec3(0, 1, 0), nn.xy);
 					}
 					else if (s[n + 1])
 					{
-						glm::vec3 vert = v + b * (bp[n + 1].x - o) + z2;
-						mesh.verts.push_back(vert.x);
-						mesh.verts.push_back(vert.y);
-						mesh.verts.push_back(vert.z);
-						//uvs.push_back(verts.at(verts.size() - 1));
+						vert = v + b * (bp[n + 1].x - o) + z2;
+						mesh.addVert(vert, glm::vec3(0, 1, 0), vert.xy);
 					}
+
+					
 				}
 
 			int a = 0;
@@ -218,7 +220,7 @@ void pathsToMesh(const PathsD &paths,jtgMesh& mesh,const float zThick) {
 
 				glm::vec3 nn;
 				if (sh)
-					nn = v + (na, 0) * (z.z - z2.z);
+					nn = v + glm::vec3(na, 0) * (z.z - z2.z);
 				else
 				{
 					nn = v + glm::normalize(b) * (z.z - z2.z);
@@ -227,63 +229,37 @@ void pathsToMesh(const PathsD &paths,jtgMesh& mesh,const float zThick) {
 				if (s[n])
 					a++;
 
-				int vsize = mesh.verts.size();
+				int numVerts = mesh.verts.size() / JTG_FLOATS_PER_VERT;
 
 				if (i == path.size() - 1)
 				{
-					mesh.tris.push_back(k + n + a);
-					mesh.tris.push_back(vsize + 1);
-					mesh.tris.push_back(vsize);
-
-					mesh.tris.push_back(vsize + 1);
-					mesh.tris.push_back(k + n + a);
-					mesh.tris.push_back(k + n + a + 1);
+					mesh.addQuad(k + n + a, numVerts + 1, numVerts, k + n + a + 1);
 				}
 				else
 				{
-					mesh.tris.push_back(vsize + c);
-					mesh.tris.push_back(vsize + 1);
-					mesh.tris.push_back(vsize);
-
-					mesh.tris.push_back(vsize + 1);
-					mesh.tris.push_back(vsize + c);
-					mesh.tris.push_back(vsize + c + 1);
+					mesh.addQuad(numVerts + c, numVerts + 1, numVerts, numVerts + c + 1);
 				}
 
 				//add vertices
 				glm::vec3 vert = v + b * (bp[n].x - o) + z;
-				mesh.verts.push_back(vert.x);
-				mesh.verts.push_back(vert.y);
-				mesh.verts.push_back(vert.z);
-
-				// ad uvs
-				/*uvs.push_back(verts.at(verts.size() - 1));*/
-				mesh.verts.push_back(mesh.verts.at(mesh.verts.size() - 3));
-				mesh.verts.push_back(mesh.verts.at(mesh.verts.size() - 2));
-				mesh.verts.push_back(mesh.verts.at(mesh.verts.size() - 1));
+				mesh.addVert(vert, glm::vec3(0, 1, 0), vert.xy);
 
 				if (n == bpSize - 2)
 				{
-					glm::vec3 vert = v + b * (bp[n + 1].x - o) + z2;
-					mesh.verts.push_back(vert.x);
-					mesh.verts.push_back(vert.y);
-					mesh.verts.push_back(vert.z);
-					//uvs.push_back(nn);
+					vert = v + b * (bp[n + 1].x - o) + z2;
+					mesh.addVert(vert, glm::vec3(0, 1, 0), nn);
 				}
 				else if (s[n + 1])
 				{
-					glm::vec3 vert = v + b * (bp[n + 1].x - o) + z2;
-					mesh.verts.push_back(vert.x);
-					mesh.verts.push_back(vert.y);
-					mesh.verts.push_back(vert.z);
-					//uvs.push_back(verts.at(verts.size() - 1));
+					vert = v + b * (bp[n + 1].x - o) + z2;
+					mesh.addVert(vert, glm::vec3(0, 1, 0), vert.xy);
 				}
 			}
 		}
 
 		offsetPaths[l] = offsetPath;
 
-		k = mesh.verts.size();
+		k = mesh.verts.size() / JTG_FLOATS_PER_VERT;
 	}
 
 	//norms = computeNormals(verts, tris);
@@ -291,12 +267,8 @@ void pathsToMesh(const PathsD &paths,jtgMesh& mesh,const float zThick) {
 	// front face
 
 	for (unsigned int i = 0; i < offsetPaths[0].size(); i++) {
-		glm::vec3 vert = glm::vec3(offsetPaths[0][i], 0);
-		mesh.verts.push_back(vert.x);
-		mesh.verts.push_back(vert.y);
-		mesh.verts.push_back(vert.z);
-		//uvs.push_back(offsetPaths[0][i]);
-		//norms.push_back(glm::vec3(0, 0, -1));
+		glm::vec2 v = offsetPaths[0][i];
+		mesh.addVert(glm::vec3(v, 0), glm::vec3(0, 0, -1), v);
 	}
 
 	std::vector<unsigned int> frontTris = mapbox::earcut<unsigned int>(paths);
