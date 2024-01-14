@@ -4,6 +4,14 @@ static float maxVertSize = 4096;
 
 bpLevelObject::bpLevelObject(Clipper2Lib::PathsD shape, glm::vec2 pos, float zPos, float zThick) {
 
+	this->bevel = bpBevel();
+
+	this->bevel.pointsMiterZ[0] = glm::vec2(0.1f, 0);
+	this->bevel.pointsMiterZ[1] = glm::vec2(0, 0.1f);
+	this->bevel.pointsMiterZ[2] = glm::vec2(0, 1);
+
+	this->bevel.numPoints = 3;
+
 	this->trans = jtgTransform();
 	this->trans.pos.xy = pos;
 	this->trans.pos.z = zPos;
@@ -20,7 +28,7 @@ bpLevelObject::bpLevelObject(Clipper2Lib::PathsD shape, glm::vec2 pos, float zPo
 
 void bpLevelObject::updateMesh()
 {
-	pathsToMesh(this->shape, this->mesh, this->zThick);
+	pathsToMesh(this->shape, this->bevel, this->mesh, this->zThick);
 	this->rend.setMesh(this->mesh);
 }
 

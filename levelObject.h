@@ -18,6 +18,7 @@ using namespace glm;
 struct bpLevelObject {
 	jtgTransform trans;
 	jtgMesh mesh;
+	bpBevel bevel;
 	jtgMeshRenderer rend;
 
 	Clipper2Lib::PathsD shape;
@@ -28,9 +29,5 @@ struct bpLevelObject {
 	bpLevelObject(Clipper2Lib::PathsD shape, glm::vec2 pos, float zPos, float zThick);
 
 	void updateMesh();
-	//void setShape(PathD shape);
-	//void setZThick(float zThick);
-	//void addPoint(PointD point);
-	//void addPointWorldSpace(glm::vec2 point);
 	glm::vec2 positionAsLocal(glm::vec2 point);
 };

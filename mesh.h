@@ -10,6 +10,7 @@ typedef struct jtgMesh {
 	std::vector<unsigned int> tris;
 
 	void addVert(glm::vec3 vert, glm::vec3 norm, glm::vec2 uv);
+	void setNorm(int index, glm::vec3 norm);
 	void addTri(int a, int b, int c);
 	void addQuad(int a, int b, int c, int d);
 } jtgMesh;

@@ -9,11 +9,6 @@
 #include <glm/gtx/string_cast.hpp>
 
 #include "camera.h"
-#include "dynamics.h"
-#include "transform.h"
-#include "shader.h"
-#include "rendering.h"
-#include "mesh.h"
 
 #include "levelObject.h"
 
@@ -82,11 +77,9 @@ int main()
 
 	const glm::vec3 camOffset = glm::vec3(0, 0, -1);
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-	// end init
-
 	const float dt = 0.05f;
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	while (!glfwWindowShouldClose(mainWindow))
 	{

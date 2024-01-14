@@ -2,71 +2,6 @@
 
 #include <glm/glm.hpp>
 
-//Mesh blockMeshWithCornerOrigin(const float& x, const float& y, const float& z) {
-//	Mesh m;
-
-//	m.verts = {
-//		// pos   norm      uv
-//		// bottom
-//		0, 0, 0, 0, -1, 0, x, 0, // 0
-//		x, 0, 0, 0, -1, 0, 0, 0, // 1
-//		x, 0, z, 0, -1, 0, 0, z, // 2
-//		0, 0, z, 0, -1, 0, x, z, // 3
-
-//		// top
-//		0, y, 0, 0, 1, 0, 0, 0, // 4
-//		0, y, z, 0, 1, 0, 0, z, // 5
-//		x, y, z, 0, 1, 0, x, z, // 6
-//		x, y, 0, 0, 1, 0, x, 0, // 7
-
-//		// left
-//		0, 0, 0, -1, 0, 0, 0, y, // 8
-//		0, 0, z, -1, 0, 0, z, y, // 9
-//		0, y, z, -1, 0, 0, z, 0, // 10
-//		0, y, 0, -1, 0, 0, 0, 0, // 11
-
-//		// right
-//		x, 0, 0, 1, 0, 0, z, y, // 12
-//		x, y, 0, 1, 0, 0, z, 0, // 13
-//		x, y, z, 1, 0, 0, 0, 0, // 14
-//		x, 0, z, 1, 0, 0, 0, y, // 15
-
-//		// back
-//		0, 0, 0, 0, 0, -1, x, y, // 16
-//		0, y, 0, 0, 0, -1, x, 0, // 18
-//		x, y, 0, 0, 0, -1, 0, 0, // 18
-//		x, 0, 0, 0, 0, -1, 0, y, // 19
-
-//		// front
-//		0, 0, z, 0, 0, 1, 0, y, // 20
-//		x, 0, z, 0, 0, 1, x, y, // 21
-//		x, y, z, 0, 0, 1, x, 0, // 22
-//		0, y, z, 0, 0, 1, 0, 0, // 23
-//	};
-
-//	m.tris = {
-//		0, 1, 2,
-//		2, 3, 0,
-
-//		4, 5, 6,
-//		6, 7, 4,
-
-//		8, 9, 10,
-//		10, 11, 8,
-
-//		12, 13, 14,
-//		14, 15, 12,
-
-//		16, 17, 18,
-//		18, 19, 16,
-
-//		20, 21, 22,
-//		22, 23, 20,
-//	};
-
-//	return m;
-//}
-
 void jtgMeshBlock(jtgMesh& mesh, glm::vec3 size) {
 
 	glm::vec3 ax = size * .5f;
@@ -191,6 +126,15 @@ void jtgMesh::addVert(glm::vec3 vert, glm::vec3 norm, glm::vec2 uv)
 
 	this->verts.push_back(uv.x);
 	this->verts.push_back(uv.y);
+}
+
+void jtgMesh::setNorm(int index, glm::vec3 norm)
+{
+	int i = index * JTG_FLOATS_PER_VERT;
+
+	this->verts[i + 3] = norm.x;
+	this->verts[i + 4] = norm.y;
+	this->verts[i + 5] = norm.z;
 }
 
 void jtgMesh::addTri(int a, int b, int c)
