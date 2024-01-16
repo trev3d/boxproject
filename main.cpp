@@ -54,14 +54,11 @@ int main()
 	// init game
 
 	jtgCamSetup();
-	jtgCamOrient(glm::vec3(0), glm::vec3(0, 0, 1));
 
 	jtgTransformShader mainShader = jtgTransformShader(jtgShaderBuild("vert.vs", "frag.fs"));
-
-	jtgPhysCollisionGroup mainCollisionGroup;
-	jtgPhysWorld physWorld = jtgPhysWorld(&mainCollisionGroup);
-
 	jtgShaderGroup shaderGroup = jtgShaderGroup(&mainShader);
+	jtgRenderGroup renderGroup = jtgRenderGroup();
+	renderGroup.add(shaderGroup);
 
 	PathsD shapes = PathsD();
 	PathD shape = PathD();
@@ -71,9 +68,11 @@ int main()
 	shape.push_back(PointD(0, 1));
 	shapes.push_back(shape);
 
-	bpLevelObject levelObject = bpLevelObject(shapes, glm::vec2(0, 0), 0, 1);
+	bpLevelObject levelObject = bpLevelObject(shapes, glm::vec3(0), 1);
 
 	shaderGroup.add(levelObject.rend);
+
+	
 
 	const glm::vec3 camOffset = glm::vec3(0, 0, -1);
 
@@ -102,7 +101,7 @@ int main()
 
 		// render
 
-		shaderGroup.render();
+		renderGroup.render();
 
 		glfwSwapBuffers(mainWindow);
 	}

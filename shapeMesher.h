@@ -23,7 +23,4 @@ typedef struct bpBevel {
 
 } bpBevel;
 
-//std::vector<glm::vec3> computeNormals(const std::vector<glm::vec3> &verts,
-//	const std::vector<unsigned int> &tris);
-
 void pathsToMesh(const PathsD &paths, const bpBevel& bevel, jtgMesh& mesh, const float zThick);

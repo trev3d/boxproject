@@ -136,8 +136,6 @@
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="constants.h" />
-    <ClInclude Include="dynamics.h" />
-    <ClInclude Include="gamepieces.h" />
     <ClInclude Include="levelObject.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="shapeMesher.h" />
@@ -153,7 +151,6 @@
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="dynamics.cpp" />
-    <ClCompile Include="gamepieces.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="levelObject.cpp" />
     <ClCompile Include="main.cpp" />

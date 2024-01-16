@@ -6,6 +6,7 @@
 #define JTG_FLOATS_PER_VERT 8
 
 typedef struct jtgMesh {
+	// 3 pos 3 norm 2 uv
 	std::vector<float> verts;
 	std::vector<unsigned int> tris;
 
