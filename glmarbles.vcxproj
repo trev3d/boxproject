@@ -136,28 +136,31 @@
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="debugdraw.h" />
     <ClInclude Include="levelObject.h" />
     <ClInclude Include="mesh.h" />
-    <ClInclude Include="shapeMesher.h" />
     <ClInclude Include="rendering.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="transform.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="debugfrag.fs" />
+    <None Include="debugvert.vs" />
     <None Include="frag.fs" />
     <None Include="texture.fs" />
     <None Include="vert.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
-    <ClCompile Include="dynamics.cpp" />
+    <ClCompile Include="debugdraw.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="levelObject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mesh.cpp" />
-    <ClCompile Include="shapeMesher.cpp" />
+    <ClCompile Include="phys.cpp" />
     <ClCompile Include="rendering.cpp" />
     <ClCompile Include="shader.cpp" />
+    <ClCompile Include="shapeMesher.cpp" />
     <ClCompile Include="transform.cpp" />
   </ItemGroup>
   <ItemGroup>

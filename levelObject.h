@@ -15,24 +15,13 @@
 
 using namespace glm;
 
-struct bpObjectGroup {
-	jtgTransform trans;
-
-	b2Body* body;
-
-	std::vector<bpLevelObject> levelObjects;
-
-	bpObjectGroup(glm::vec3 pos);
-	void updateCollisionShape();
-};
-
 struct bpLevelObject {
 	jtgTransform trans;
 	jtgMesh mesh;
 	bpBevel bevel;
 	jtgMeshRenderer rend;
 
-	b2Fixture fixture;
+	// b2Fixture fixture;
 
 	Clipper2Lib::PathsD shape;
 
@@ -43,4 +32,15 @@ struct bpLevelObject {
 	//void applyShape();
 	void updateMesh();
 	glm::vec2 positionAsLocal(glm::vec2 point);
+};
+
+struct bpObjectGroup {
+	jtgTransform trans;
+
+	b2Body* body;
+
+	std::vector<bpLevelObject> levelObjects;
+
+	bpObjectGroup(glm::vec3 pos);
+	void updateCollisionShape();
 };

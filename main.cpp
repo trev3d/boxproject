@@ -9,7 +9,7 @@
 #include <glm/gtx/string_cast.hpp>
 
 #include "camera.h"
-
+#include "rendering.h"
 #include "levelObject.h"
 
 void OnFramebufferSize(GLFWwindow* window, int width, int height)
@@ -56,25 +56,35 @@ int main()
 	jtgCamSetup();
 
 	jtgTransformShader mainShader = jtgTransformShader(jtgShaderBuild("vert.vs", "frag.fs"));
+
 	jtgShaderGroup shaderGroup = jtgShaderGroup(&mainShader);
-	jtgRenderGroup renderGroup = jtgRenderGroup();
-	renderGroup.add(shaderGroup);
 
 	PathsD shapes = PathsD();
 	PathD shape = PathD();
+
+	shape.push_back(PointD(- 100, -5));
+	shape.push_back(PointD(100, -5));
+	shape.push_back(PointD(100, 0));
+	shape.push_back(PointD(-100, 0));
+	shapes.push_back(shape);
+
+	bpLevelObject groundObject = bpLevelObject(shapes, glm::vec3(0), 5);
+	shaderGroup.add(groundObject.rend);
+
+	shapes.clear();
+	shape.clear();
+
 	shape.push_back(PointD(-1, 0));
 	shape.push_back(PointD(1, 0));
 	shape.push_back(PointD(1, 1));
 	shape.push_back(PointD(0, 1));
 	shapes.push_back(shape);
 
-	bpLevelObject levelObject = bpLevelObject(shapes, glm::vec3(0), 1);
+	bpLevelObject testObject = bpLevelObject(shapes, glm::vec3(0), 1);
 
-	shaderGroup.add(levelObject.rend);
+	shaderGroup.add(testObject.rend);
 
-	
-
-	const glm::vec3 camOffset = glm::vec3(0, 0, -1);
+	const glm::vec3 camOffset = glm::vec3(0, 1, -3);
 
 	const float dt = 0.05f;
 
@@ -91,17 +101,17 @@ int main()
 
 		// update cam
 
-		const glm::vec3 camOffset = glm::vec3(sin(t), cos(t), -1);
+		const glm::vec3 camOffset = glm::vec3(sin(t) * 0.2f, cos(t) * 0.2f + 1, -1);
 
-		glm::vec3 camTargetPos = levelObject.trans.pos + camOffset;
+		glm::vec3 camTargetPos = testObject.trans.pos + camOffset;
 		glm::vec3 camDiff = camTargetPos - jtgCamPos;
-		glm::vec3 camTargetForw = jtgCamPos - levelObject.trans.pos;
+		glm::vec3 camTargetForw = jtgCamPos - testObject.trans.pos;
 
-		jtgCamOrient(jtgCamPos + camDiff * dt * 10.0f, levelObject.trans.pos);
+		jtgCamOrient(jtgCamPos + camDiff * dt * 10.0f, testObject.trans.pos);
 
 		// render
 
-		renderGroup.render();
+		shaderGroup.render();
 
 		glfwSwapBuffers(mainWindow);
 	}

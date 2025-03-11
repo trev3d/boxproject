@@ -33,10 +33,10 @@
     <ClInclude Include="transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="levelObject.h">
+    <ClInclude Include="debugdraw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="shapeMesher.h">
+    <ClInclude Include="levelObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -48,6 +48,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="vert.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="debugfrag.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="debugvert.vs">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
@@ -70,16 +76,19 @@
     <ClCompile Include="mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dynamics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="levelObject.cpp">
+    <ClCompile Include="debugdraw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="shapeMesher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="phys.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="levelObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

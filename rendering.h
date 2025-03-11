@@ -38,9 +38,9 @@ typedef struct jtgShaderGroup {
 	void render();
 } jtgShaderGroup;
 
-typedef struct jtgRenderGroup {
-	std::vector<jtgShaderGroup> shaderGroups;
-
-	void add(jtgShaderGroup group);
-	void render();
-};
+//typedef struct jtgRenderGroup {
+//	std::vector<jtgShaderGroup> shaderGroups;
+//
+//	void add(const jtgShaderGroup group);
+//	void render();
+//};

@@ -89,14 +89,14 @@ void jtgShaderGroup::render()
 	}
 }
 
-void jtgRenderGroup::add(jtgShaderGroup group)
-{
-	this->shaderGroups.push_back(group);
-}
-
-void jtgRenderGroup::render()
-{
-	for (int i = 0; i < this->shaderGroups.size(); i++) {
-		this->shaderGroups[i].render();
-	}
-}
+//void jtgRenderGroup::add(const jtgShaderGroup group)
+//{
+//	this->shaderGroups.push_back(group);
+//}
+//
+//void jtgRenderGroup::render()
+//{
+//	for (int i = 0; i < this->shaderGroups.size(); i++) {
+//		this->shaderGroups[i].render();
+//	}
+//}

@@ -21,13 +21,13 @@ bpLevelObject::bpLevelObject(Clipper2Lib::PathsD shape, glm::vec3 pos, float zTh
 
 	this->rend = jtgMeshRenderer(&this->trans);
 
-	b2PolygonShape physShape;
-	physShape.SetAsBox(1, 1);
+	//b2PolygonShape physShape;
+	//physShape.SetAsBox(1, 1);
 
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &physShape;
-	fixtureDef.density = 1;
-	fixtureDef.friction = 0.3f;
+	//b2FixtureDef fixtureDef;
+	//fixtureDef.shape = &physShape;
+	//fixtureDef.density = 1;
+	//fixtureDef.friction = 0.3f;
 
 	updateMesh();
 }
@@ -51,17 +51,17 @@ bpObjectGroup::bpObjectGroup(glm::vec3 pos)
 	this->trans.pos = pos;
 	this->trans.apply();
 
-	b2BodyDef bodyDef;
-	bodyDef.type = b2_dynamicBody;
-	bodyDef.position = b2Vec2(this->trans.pos.x, this->trans.pos.y);
-	this->body = world.CreateBody(&bodyDef);
+	//b2BodyDef bodyDef;
+	//bodyDef.type = b2_dynamicBody;
+	//bodyDef.position = b2Vec2(this->trans.pos.x, this->trans.pos.y);
+	//this->body = world.CreateBody(&bodyDef);
 
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &dynamicBox;
-	fixtureDef.density = 1.0f;
-	fixtureDef.friction = 0.3f;
+	//b2FixtureDef fixtureDef;
+	//fixtureDef.shape = &dynamicBox;
+	//fixtureDef.density = 1.0f;
+	//fixtureDef.friction = 0.3f;
 
-	body->CreateFixture(&fixtureDef);
+	//body->CreateFixture(&fixtureDef);
 }
 
 void bpObjectGroup::updateCollisionShape()

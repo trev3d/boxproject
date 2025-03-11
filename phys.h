@@ -2,6 +2,6 @@
 
 #include "box2d/box2d.h"
 
-b2World world;
+//b2World world;
 
-void setupPhysWorld();
+//void setupPhysWorld();
